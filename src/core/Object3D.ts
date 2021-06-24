@@ -1,5 +1,5 @@
 import { Object3D, Scene } from 'three'
-import { ComponentPublicInstance, defineComponent, PropType, watch } from 'vue'
+import { ComponentPublicInstance, getCurrentInstance, defineComponent, PropType, watch } from 'vue'
 import { bindObjectProp, bindProp } from '../tools'
 import { RendererInjectionKey, RendererInterface } from './Renderer'
 import { SceneInjectionKey } from './Scene'
@@ -125,6 +125,9 @@ export default defineComponent({
     },
     getParent(): undefined | ComponentPublicInstance {
       let parent = this.$parent
+      const instance = getCurrentInstance()
+      if(instance && instance.parent)
+        parent = instance.parent.ctx
       while (parent) {
         if ((parent as any).add) return parent
         parent = parent.$parent
